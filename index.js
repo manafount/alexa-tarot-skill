@@ -8,9 +8,9 @@ const handlers = {
       this.emit(':tell', 'Welcome to Tarot Reader!');
   },
   'AMAZON.HelpIntent': function () {
-      let helpSpeech = "<s>Try asking for a one, three, or five card reading.</s> " +
-      "<s>If you want to know more about a card, try asking me to clarify that card.</s> " +
-      "<s>You can also ask me to describe what a card looks like.</s>";
+      let helpSpeech = "Try asking for a one, three, or five card reading. " +
+      "If you want to know more about a card, try asking me to clarify that card. " +
+      "You can also ask me to describe what a card looks like.";
       this.emit(':tell', helpSpeech);
   },
   'AMAZON.CancelIntent': function () {
@@ -60,21 +60,21 @@ const handlers = {
                     speech = text + formatSpeech(cards[0]);
                     break;
                 case 3:
-                    text = `<s>The card representing your past is the ${cards[0].name} ` + 
-                        `(${cards[0].orientation}).</s> <s>The card indicative of your present situation ` + 
-                        `is the ${cards[1].name} (${cards[1].orientation}).</s> <s>The card depicting ` + 
-                        `your future is the ${cards[2].name} (${cards[2].orientation}).</s>`;
+                    text = `The card representing your past is the ${cards[0].name} ` + 
+                        `(${cards[0].orientation}). The card indicative of your present situation ` + 
+                        `is the ${cards[1].name} (${cards[1].orientation}). The card depicting ` + 
+                        `your future is the ${cards[2].name} (${cards[2].orientation}).`;
                     positions = ["your past", "the present", "the future"];
                     for(let i=0; i<3; i++) {
                         speech = speech + ' ' + formatSpeech(cards[i], positions[i]);
                     }
                     break;
                 case 5:
-                    text = `<s>The challenge facing you: the ${cards[0].name} (${cards[0].orientation}). </s>` + 
-                        `<s>Your past: the ${cards[1].name} (${cards[1].orientation}). </s>` + 
-                        `<s>The present: the ${cards[2].name} (${cards[2].orientation}). </s>` + 
-                        `<s>The future: the ${cards[3].name} (${cards[3].orientation}). </s>` + 
-                        `<s>Your possibilities: the ${cards[4].name} (${cards[4].orientation}). </s>`;
+                    text = `The challenge facing you: the ${cards[0].name} (${cards[0].orientation}). ` + 
+                        `Your past: the ${cards[1].name} (${cards[1].orientation}). ` + 
+                        `The present: the ${cards[2].name} (${cards[2].orientation}). ` + 
+                        `The future: the ${cards[3].name} (${cards[3].orientation}). ` + 
+                        `Your possibilities: the ${cards[4].name} (${cards[4].orientation}). `;
                     positions = ["the challenge facing you", "your past", 
                         "the present", "the future", "your possibilities"];
                     for(let i=0; i<5; i++) {
@@ -82,7 +82,7 @@ const handlers = {
                     }
                     break;
                 default:
-                    text = `<s>You drew the ${cards[0].name} ${cards[0].orientation}.</s>`;
+                    text = `You drew the ${cards[0].name} ${cards[0].orientation}.`;
                     speech = text + formatSpeech(cards[0]);
                     break;
             }
@@ -172,9 +172,9 @@ function formatSpeech(card, position) {
   keys = keys.slice(0, -1).join(', ') + ', and' + keys.slice(-1);
   if (position) {
       return `The card representing ${position} is the ${name}. 
-          The ${name} is associated with ${keys}`;
+          The ${name} is associated with ${keys}.`;
   }else{
-      return `The ${name} is associated with ${keys}`;
+      return `The ${name} is associated with ${keys}.`;
   }
 }
 
