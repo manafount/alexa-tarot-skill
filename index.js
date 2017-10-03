@@ -8,31 +8,29 @@ const handlers = {
       this.emit(':tell', 'Welcome to Tarot Reader!');
   },
   'AMAZON.HelpIntent': function () {
-      this.emit(':tell', 'help');
+      let helpSpeech = "<s>Try asking for a one, three, or five card reading.</s> " +
+      "<s>If you want to know more about a card, try asking me to clarify that card.</s> " +
+      "<s>You can also ask me to describe what a card looks like.</s>";
+      this.emit(':tell', helpSpeech);
   },
   'AMAZON.CancelIntent': function () {
-      this.emit(':tell', 'cancel');
+      this.emit(':tell', 'Goodbye');
   },
   'AMAZON.StopIntent': function () {
-      this.emit(':tell', 'stop');
+      this.emit(':tell', 'Goodbye');
   },
   'ReadFortuneIntent': function() {
     let readingType = this.event.request.intent.slots.readingslot.value;
     let numCards;
 
-    switch(readingType) {
-        case "1 card":
-            numCards = 1;
-            break;
-        case "3 card":
-            numCards = 3;
-            break;
-        case "5 card":
-            numCards = 5;
-            break;
-        default:
-            numCards = 1;
-            break;
+    if(/1 card/.test(readingType)) {
+      numCards = 1;
+    }else if(/3 card/.test(readingType)) {
+      numCards = 3;
+    }else if(/5 card/.test(readingType)) {
+      numCards = 5;
+    }else{
+      numCards = 1;
     }
 
     let options = getTarotSpread(numCards);
@@ -62,21 +60,21 @@ const handlers = {
                     speech = text + formatSpeech(cards[0]);
                     break;
                 case 3:
-                    text = `The card representing your past is the ${cards[0].name} ` + 
-                        `(${cards[0].orientation}). The card indicative of your present situation ` + 
-                        `is the ${cards[1].name} (${cards[1].orientation}). The card depicting ` + 
-                        `your future is the ${cards[2].name} (${cards[2].orientation}).`;
+                    text = `<s>The card representing your past is the ${cards[0].name} ` + 
+                        `(${cards[0].orientation}).</s> <s>The card indicative of your present situation ` + 
+                        `is the ${cards[1].name} (${cards[1].orientation}).</s> <s>The card depicting ` + 
+                        `your future is the ${cards[2].name} (${cards[2].orientation}).</s>`;
                     positions = ["your past", "the present", "the future"];
                     for(let i=0; i<3; i++) {
                         speech = speech + ' ' + formatSpeech(cards[i], positions[i]);
                     }
                     break;
                 case 5:
-                    text = `The challenge facing you: the ${cards[0].name} (${cards[0].orientation}). ` + 
-                        `Your past: the ${cards[1].name} (${cards[1].orientation}). ` + 
-                        `The present: the ${cards[2].name} (${cards[2].orientation}). ` + 
-                        `The future: the ${cards[3].name} (${cards[3].orientation}). ` + 
-                        `Your possibilities: the ${cards[4].name} (${cards[4].orientation}). `;
+                    text = `<s>The challenge facing you: the ${cards[0].name} (${cards[0].orientation}). </s>` + 
+                        `<s>Your past: the ${cards[1].name} (${cards[1].orientation}). </s>` + 
+                        `<s>The present: the ${cards[2].name} (${cards[2].orientation}). </s>` + 
+                        `<s>The future: the ${cards[3].name} (${cards[3].orientation}). </s>` + 
+                        `<s>Your possibilities: the ${cards[4].name} (${cards[4].orientation}). </s>`;
                     positions = ["the challenge facing you", "your past", 
                         "the present", "the future", "your possibilities"];
                     for(let i=0; i<5; i++) {
@@ -84,7 +82,7 @@ const handlers = {
                     }
                     break;
                 default:
-                    text = `You drew the ${cards[0].name} ${cards[0].orientation}.`;
+                    text = `<s>You drew the ${cards[0].name} ${cards[0].orientation}.</s>`;
                     speech = text + formatSpeech(cards[0]);
                     break;
             }
@@ -114,7 +112,8 @@ const handlers = {
     makeRequest(options, (data, error) => {
         if (data) {
             let response = '';
-            if (slots.orientationslot.value.toLowerCase() === 'reversed') {
+            let orientation = slots.orientationslot.value;
+            if (orientation && orientation.toLowerCase() === 'reversed') {
                 response = data.readings.reversed;
             }else{
                 response = data.readings.upright;
