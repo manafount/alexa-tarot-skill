@@ -145,6 +145,9 @@ const handlers = {
           }
       });
   },
+  'Unhandled': function() {
+    this.emit('HelpIntent');
+  },
 };
 
 function getTarotSpread(numCards) {
