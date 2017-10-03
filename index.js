@@ -38,7 +38,6 @@ const handlers = {
     console.log(options);
     makeRequest(options, (data, error) => {
         if (data) {
-            console.log(data);
             let { cards, spreadImg } = data.spread;
             let cardKeywords = [];
             let speech = "";
@@ -89,11 +88,12 @@ const handlers = {
 
             let cardTitle = `Your ${readingType} Reading`;
             let cardContent = "";
+            spreadImg = spreadImg.replace('http://', 'https://');
             let imageObject = {
               smallImageUrl: spreadImg,
               largeImageUrl: spreadImg
             };
-
+            console.log(imageObject);
             this.emit(':tellWithCard', speech, cardTitle, cardContent, imageObject);
         } else {
             this.emit(':tell', 'I\'m not sure!');
@@ -158,8 +158,8 @@ function getTarotSpread(numCards) {
 }
 
 function searchCardsByName(cardName) {
-  // escape spaces before appending cardName to query string
   cardName = cardName.replace('The ', '');
+  // escape spaces before appending cardName to query string
   cardName = cardName.replace(/ /g,'%20');
   console.log(cardName);
   return {
@@ -172,7 +172,7 @@ function formatSpeech(card, position) {
   let keys = card.keywords[card.orientation];
   let name = `${card.name} (${card.orientation})`;
 
-  keys = keys.slice(0, -1).join(', ') + ', and' + keys.slice(-1);
+  keys = keys.slice(0, -1).join(', ') + ', and ' + keys.slice(-1);
   if (position) {
       return `The card representing ${position} is the ${name}. 
           The ${name} is associated with ${keys}.`;
@@ -208,7 +208,6 @@ function capitalizeText(string) {
 }
 
 function makeRequest(options, callback) {
-  console.log(options);
   var request = http.request(options, 
   function(response) {
       var responseString = '';
