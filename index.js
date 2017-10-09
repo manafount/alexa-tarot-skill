@@ -55,7 +55,7 @@ const handlers = {
 
             switch(cards.length) {
                 case 1:
-                    text = `You drew the ${cards[0].name} (${cards[0].orientation}).`;
+                    text = `You drew the ${cards[0].name} (${cards[0].orientation}). `;
                     speech = text + formatSpeech(cards[0]);
                     break;
                 case 3:
@@ -174,8 +174,7 @@ function formatSpeech(card, position) {
 
   keys = keys.slice(0, -1).join(', ') + ', and ' + keys.slice(-1);
   if (position) {
-      return `The card representing ${position} is the ${name}. 
-          The ${name} is associated with ${keys}.`;
+      return `The card representing ${position} is the ${name}. The ${name} is associated with ${keys}.`;
   }else{
       return `The ${name} is associated with ${keys}.`;
   }
