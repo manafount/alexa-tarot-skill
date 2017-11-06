@@ -1,7 +1,7 @@
 'use strict';
 let http = require('http');
 let Alexa = require('alexa-sdk');
-let tarotAPI = "tarotreader-179104.appspot.com";
+let tarotAPI = "tarot-reader.herokuapp.com";
 
 const handlers = {
   'LaunchRequest': function () {
